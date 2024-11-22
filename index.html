@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <title>Creative Portfolio</title>
+    <!-- Previous CDN imports remain the same -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Previous styles remain the same until nav styles */
+        
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #0f172a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;        
+            padding: 1.5rem;
+            background: rgba(15, 23, 42, 0.9);        
+            z-index: 1000;
+        }        
+        
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #000080, #800080); /* navy to purple */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1100;
+        }
+
+        .hamburger span {
+            width: 100%;
+            height: 3px;
+            background: #fff;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links {
+    display: flex;
+    gap: 2rem;
+    z-index: 1001; /* Increased z-index */
+}
+
+@media (max-width: 768px) {
+    .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        height: 100vh;
+        width: 100%;
+        max-width: 300px;
+        background: rgba(15, 23, 42, 0.98);
+        backdrop-filter: blur(10px);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        transition: right 0.3s ease;
+        z-index: 1001; /* Increased z-index */
+    }
+}
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .hamburger.active span:first-child {
+                transform: rotate(45deg) translate(6px, 6px);
+            }
+
+            .hamburger.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger.active span:last-child {
+                transform: rotate(-45deg) translate(6px, -6px);
+            }
+
+            .nav-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                backdrop-filter: blur(3px);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+                z-index: 999;
+            }
+
+            .nav-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+
+        /* Rest of previous styles remain the same */
+        
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #000080, #800080);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, #000080, #800080);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+        }
+
+        .section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            background: linear-gradient(45deg, #000080, #800080);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+        }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .project-card img {
+            width: 100%;
+            height: 540px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .project-card h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .project-card p {
+            color: #94a3b8;
+            margin-bottom: 1rem;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .skill-item {
+            background: linear-gradient(45deg, #000080, #800080);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+            padding: 2rem;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .skill-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .skill-item i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #000080, #800080);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Adding loading animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0f172a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loader-content {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #4ecdc4;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+        
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);            
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            transition: background 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            background: linear-gradient(45deg, #000080, #800080);
+            outline: none;
+            box-shadow: 0 0 0 2px #4ecdc4;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(45deg, #000080, #800080);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);            
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .social-link {
+            color: #fff;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .social-link:hover {
+            transform: translateY(-5px);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-30px);
+            }
+            60% {
+                transform: translateY(-15px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Add loading screen -->
+    <div class="loader">
+        <div class="loader-content"></div>
+    </div>
+    
+    <div id="particles-js"></div>
+    
+    <div class="content">
+        <nav class="nav">
+            <div class="nav-content">
+                <div class="logo">Portfolio</div>
+                <button class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>                
+                <div class="nav-links">
+                    <a href="#home" class="nav-link">Home</a>
+                    <a href="#projects" class="nav-link">Projects</a>
+                    <a href="#skills" class="nav-link">Skills</a>
+                    <a href="#contact" class="nav-link">Contact</a>
+                </div>
+                <div class="nav-overlay"><img src="logo.png" alt="logo" width="100%"></div>
+            </div>
+        </nav>
+
+        <!-- Rest of previous HTML content remains the same -->
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h1>Creative Developer</h1>
+                <p>Crafting digital experiences that inspire and engage</p>
+                <a href="#contact" class="cta-button">Get in touch</a>
+                <div class="scroll-indicator">
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="section">
+            <h2 class="section-title">Featured Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <img src="pro1.jpg" alt="Project 1">
+                    <h3>Project One</h3>
+                    <p>Description</p>
+                </div>
+                <div class="project-card">
+                    <img src="pro2.jpg" alt="Project 2">
+                    <h3>Project Two</h3>
+                    <p>Description</p>
+                </div>
+                <div class="project-card">
+                    <img src="pro3.jpg" alt="Project 3">
+                    <h3>Project Three</h3>
+                    <p>Description</p>
+                </div>
+                <div class="project-card">
+                    <img src="pro4.jpg" alt="Project 4">
+                    <h3>Project Four</h3>
+                    <p>Description</p>
+                </div>
+                <div class="project-card">
+                    <img src="pro5.jpg" alt="Project 5">
+                    <h3>Project Five</h3>
+                    <p>Description</p>
+                </div>
+                <div class="project-card">
+                    <img src="pro6.jpg" alt="Project 6">
+                    <h3>Project Six</h3>
+                    <p>Description</p>
+                </div>
+                
+                <div class="project-card">
+                    <img src="pro7.jpg" alt="Project 7">
+                    <h3>Project Seven</h3>
+                    <p>Description</p>
+                </div>
+                <div class="project-card">
+                    <img src="pro8.jpg" alt="Project 8">
+                    <h3>Project Eight</h3>
+                    <p>Description</p>
+                </div>
+                <div class="project-card">
+                    <img src="pro9.jpg" alt="Project 9">
+                    <h3>Project Nine</h3>
+                    <p>Description</p>
+                </div>
+            </div>
+            
+            <div class="project-card">
+                    <img src="pro10.jpg" alt="Project 10">
+                    <h3>Project Ten</h3>
+                    <p>Description</p>
+                </div>
+                <div class="project-card">
+                    <img src="pro11.jpg" alt="Project 11">
+                    <h3>Project Eleven</h3>
+                    <p>Description</p>
+                </div>
+                <div class="project-card">
+                    <img src="pro12.jpg" alt="Project 12">
+                    <h3>Project Twelve</h3>
+                    <p>Description</p>
+                </div>
+        </section>
+
+        <section id="skills" class="section">
+            <h2 class="section-title">Skills & Expertise</h2>
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <i class="fab fa-html5"></i>
+                    <h3>HTML5</h3>
+                </div>
+                <div class="skill-item">
+                    <i class="fab fa-css3-alt"></i>
+                    <h3>CSS3</h3>
+                </div>
+                <div class="skill-item">
+                    <i class="fab fa-js"></i>
+                    <h3>JavaScript</h3>
+                </div>
+                <!-- <div class="skill-item">
+                    <i class="fab fa-react"></i>
+                    <h3>React</h3>
+                </div> -->
+            </div>
+        </section>
+
+        <section id="contact" class="section">
+            <h2 class="section-title">Get in Touch</h2>
+            <form class="contact-form">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </section>
+
+        <footer class="footer">
+            <div class="social-links">
+                <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+            </div>
+            <p>&copy; 2024 Portfolio. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Add mobile navigation functionality
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        const navOverlay = document.querySelector('.nav-overlay');
+        const navLinksArray = document.querySelectorAll('.nav-link');
+
+        function toggleMenu() {
+    hamburger.classList.toggle('active');
+    navLinks.classList.toggle('active');
+    navOverlay.classList.toggle('active');
+    
+    // Force a reflow to ensure the transition works
+    navLinks.offsetHeight;
+    
+    document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+    
+    // Add focus handling
+    if (navLinks.classList.contains('active')) {
+        navLinks.querySelector('a').focus();
+    }
+}
+
+// Close menu when clicking outside
+document.addEventListener('click', (e) => {
+    if (!navLinks.contains(e.target) && 
+        !hamburger.contains(e.target) && 
+        navLinks.classList.contains('active')) {
+        toggleMenu();
+    }
+});
+
+// Add escape key handler
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+        toggleMenu();
+    }
+});
+
+        hamburger.addEventListener('click', toggleMenu);
+        navOverlay.addEventListener('click', toggleMenu);
+
+        // Close menu when clicking a link
+        navLinksArray.forEach(link => {
+            link.addEventListener('click', () => {
+                if (navLinks.classList.contains('active')) {
+                    toggleMenu();
+                }
+            });
+        });
+
+        // Close menu on resize if open
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
+                toggleMenu();
+            }
+        });
+
+        // Previous JavaScript content remains the same
+        // Add loading screen handler
+        window.addEventListener('load', () => {
+            const loader = document.querySelector('.loader');
+            gsap.to(loader, {
+                opacity: 0,
+                duration: 1,
+                onComplete: () => loader.style.display = 'none'
+            });
+        });
+
+        // Previous JavaScript content remains the same, but add error handling
+        // Initialize particles.js
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#ffffff' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.5, random: false },
+                size: { value: 3, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#ffffff',
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 6,
+                    direction: 'none',
+                    random: false,
+                    straight: false,
+                    out_mode: 'out',
+                    bounce: false
+                }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: { enable: true, mode: 'repulse' },
+                    onclick: { enable: true, mode: 'push' },
+                    resize: true
+                }
+            },
+            retina_detect: true
+        });
+        
+            // Previous particles.js config
+        
+        
+        // Initialize Vanilla Tilt for project cards
+VanillaTilt.init(document.querySelectorAll('.project-card'), {
+    max: 15,
+    speed: 400,
+    glare: true,
+    'max-glare': 0.5
+});
+
+        // Add error handling for VanillaTilt
+        try {
+            VanillaTilt.init(document.querySelectorAll('.project-card'), {
+                max: 15,
+                speed: 400,
+                glare: true,
+                'max-glare': 0.5
+            });
+        } catch (error) {
+            console.warn('VanillaTilt initialization failed:', error);
+        }
+
+        // Initialize GSAP with ScrollToPlugin
+        gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+        // Hero section animations
+const heroTimeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
+heroTimeline
+    .to('.hero h1', {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        delay: 0.5
+    })
+    .to('.hero p', {
+        opacity: 1,
+        y: 0,
+        duration: 1
+    }, '-=0.5')
+    .to('.cta-button', {
+        opacity: 1,
+        y: 0,
+        duration: 1
+    }, '-=0.5');
+
+// Scroll animations for sections
+const sections = document.querySelectorAll('.section');
+sections.forEach(section => {
+    gsap.from(section, {
+        scrollTrigger: {
+            trigger: section,
+            start: 'top 80%',
+            end: 'top 20%',
+            toggleActions: 'play none none reverse'
+        },
+        opacity: 0,
+        y: 50,
+        duration: 1
+    });
+});
+
+// Animate skill items on scroll
+gsap.utils.toArray('.skill-item').forEach((item, i) => {
+    gsap.from(item, {
+        scrollTrigger: {
+            trigger: item,
+            start: 'top 80%'
+        },
+        opacity: 0,
+        y: 30,
+        rotation: -5,
+        duration: 0.8,
+        delay: i * 0.1
+    });
+});
+
+// Smooth scroll navigation
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        gsap.to(window, {
+            duration: 1,
+            scrollTo: { y: target, offsetY: 70 },
+            ease: 'power2.inOut'
+        });
+    });
+});
+
+// Animated cursor
+const cursor = document.createElement('div');
+cursor.className = 'custom-cursor';
+document.body.appendChild(cursor);
+
+const cursorStyle = document.createElement('style');
+cursorStyle.textContent = `
+    .custom-cursor {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #4ecdc4;
+        border-radius: 50%;
+        position: fixed;
+        pointer-events: none;
+        z-index: 9999;
+        mix-blend-mode: difference;
+        transition: transform 0.2s ease;
+    }
+    .custom-cursor.active {
+        transform: scale(1.5);
+    }
+`;
+document.head.appendChild(cursorStyle);
+
+document.addEventListener('mousemove', e => {
+    gsap.to(cursor, {
+        x: e.clientX - 10,
+        y: e.clientY - 10,
+        duration: 0.2
+    });
+});
+
+document.addEventListener('mousedown', () => cursor.classList.add('active'));
+document.addEventListener('mouseup', () => cursor.classList.remove('active'));
+
+// Particle connection effect on hover
+let canvas = document.createElement('canvas');
+canvas.style.position = 'fixed';
+canvas.style.top = '0';
+canvas.style.left = '0';
+canvas.style.pointerEvents = 'none';
+canvas.style.zIndex = '1';
+document.body.appendChild(canvas);
+
+let ctx = canvas.getContext('2d');
+let particles = [];
+let mouse = { x: 0, y: 0 };
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+class Particle {
+    constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = (Math.random() - 0.5) * 2;
+        this.vy = (Math.random() - 0.5) * 2;
+        this.radius = Math.random() * 2;
+    }
+
+    update() {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
+        if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
+    }
+}
+
+for (let i = 0; i < 50; i++) {
+    particles.push(new Particle());
+}
+
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    particles.forEach(particle => {
+        particle.update();
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+        ctx.fillStyle = '#4ecdc4';
+        ctx.fill();
+
+        // Connect particles near mouse
+        let dx = mouse.x - particle.x;
+        let dy = mouse.y - particle.y;
+        let distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < 100) {
+            ctx.beginPath();
+            ctx.moveTo(particle.x, particle.y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.strokeStyle = `rgba(78, 205, 196, ${1 - distance/100})`;
+            ctx.stroke();
+        }
+    });
+
+    requestAnimationFrame(animate);
+}
+
+document.addEventListener('mousemove', e => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+});
+
+animate();
+
+        // Add form validation
+        const form = document.querySelector('.contact-form');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = form.querySelector('.submit-btn');
+            const emailInput = form.querySelector('#email');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (!emailRegex.test(emailInput.value)) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
+            
+            try {
+                // Simulate form submission
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                submitBtn.textContent = 'Message Sent!';
+                form.reset();
+                
+                setTimeout(() => {
+                    submitBtn.textContent = 'Send Message';
+                    submitBtn.disabled = false;
+                }, 2000);
+            } catch (error) {
+                submitBtn.textContent = 'Error. Try Again';
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Performance optimization for particle connection effect
+        const throttle = (func, limit) => {
+            let inThrottle;
+            return function(...args) {
+                if (!inThrottle) {
+                    func.apply(this, args);
+                    inThrottle = true;
+                    setTimeout(() => inThrottle = false, limit);
+                }
+            }
+        };
+
+        document.addEventListener('mousemove', throttle(e => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        }, 16)); // Throttle to ~60fps
+
+        // Initialize particles.js with original config
+particlesJS('particles-js', {
+    particles: {
+        number: { value: 80, density: { enable: true, value_area: 800 } },
+        color: { value: '#ffffff' },
+        shape: { type: 'circle' },
+        opacity: { value: 0.5, random: false },
+        size: { value: 3, random: true },
+        line_linked: {
+            enable: true,
+            distance: 150,
+            color: '#ffffff',
+            opacity: 0.4,
+            width: 1
+        },
+        move: {
+            enable: true,
+            speed: 6,
+            direction: 'none',
+            random: false,
+            straight: false,
+            out_mode: 'out',
+            bounce: false
+        }
+    },
+    interactivity: {
+        detect_on: 'canvas',
+        events: {
+            onhover: { enable: true, mode: 'repulse' },
+            onclick: { enable: true, mode: 'push' },
+            resize: true
+        }
+    },
+    retina_detect: true
+});
+    </script>
+</body>
+</html>
